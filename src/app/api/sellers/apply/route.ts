@@ -27,8 +27,8 @@ export async function POST(request: Request) {
 
     const res = run(
       `INSERT INTO seller_applications 
-        (full_name, business_name, whatsapp_number, email, region, category_name, product_samples, social_media, delivery_options, business_description, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', datetime('now'), datetime('now'))`,
+        (full_name, business_name, whatsapp_number, email, region, category_name, product_samples, social_media, delivery_options, business_description, status, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', datetime('now'))`,
       [
         fullName.trim(),
         businessName.trim(),
