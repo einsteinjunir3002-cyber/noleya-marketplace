@@ -5,6 +5,9 @@ const nextConfig = {
     unoptimized: true,
   },
   serverExternalPackages: ['node:sqlite', 'sharp'],
+  outputFileTracingIncludes: {
+    '/**': ['./data/noleya.db'],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',

@@ -7,9 +7,23 @@ let dbInstance: DatabaseSync | null = null;
 export function getDb(): DatabaseSync {
   if (dbInstance) return dbInstance;
 
-  const dbPath = process.env.DATABASE_PATH 
+  let dbPath = process.env.DATABASE_PATH 
     ? path.resolve(process.cwd(), process.env.DATABASE_PATH)
     : path.resolve(process.cwd(), 'data', 'noleya.db');
+
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const tmpPath = path.resolve('/tmp', 'noleya.db');
+    try {
+      if (!fs.existsSync(tmpPath) && fs.existsSync(dbPath)) {
+        fs.copyFileSync(dbPath, tmpPath);
+      }
+      if (fs.existsSync(tmpPath)) {
+        dbPath = tmpPath;
+      }
+    } catch (e) {
+      console.error('Failed to copy database to /tmp:', e);
+    }
+  }
 
   const dir = path.dirname(dbPath);
   if (!fs.existsSync(dir)) {
@@ -17,9 +31,17 @@ export function getDb(): DatabaseSync {
   }
 
   const db = new DatabaseSync(dbPath);
-  db.exec('PRAGMA journal_mode = WAL;');
-  db.exec('PRAGMA foreign_keys = ON;');
-  db.exec('PRAGMA synchronous = NORMAL;');
+  try {
+    db.exec('PRAGMA journal_mode = WAL;');
+  } catch (e) {
+    try {
+      db.exec('PRAGMA journal_mode = MEMORY;');
+    } catch {}
+  }
+  try {
+    db.exec('PRAGMA foreign_keys = ON;');
+    db.exec('PRAGMA synchronous = NORMAL;');
+  } catch {}
 
   dbInstance = db;
   return dbInstance;
