@@ -13,9 +13,30 @@ export function getDb(): DatabaseSync {
 
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     const tmpPath = path.resolve('/tmp', 'noleya.db');
+    const candidatePaths = [
+      process.env.DATABASE_PATH ? path.resolve(process.cwd(), process.env.DATABASE_PATH) : null,
+      path.resolve(process.cwd(), 'data', 'noleya.db'),
+      path.resolve(__dirname, 'data', 'noleya.db'),
+      path.resolve(__dirname, '..', 'data', 'noleya.db'),
+      path.resolve(__dirname, '../..', 'data', 'noleya.db'),
+      path.resolve(__dirname, '../../..', 'data', 'noleya.db'),
+      path.resolve(__dirname, '../../../../data/noleya.db'),
+      process.env.LAMBDA_TASK_ROOT ? path.resolve(process.env.LAMBDA_TASK_ROOT, 'data', 'noleya.db') : null,
+    ].filter(Boolean) as string[];
+
+    let foundSource: string | null = null;
+    for (const p of candidatePaths) {
+      if (fs.existsSync(p)) {
+        foundSource = p;
+        break;
+      }
+    }
+
     try {
-      if (!fs.existsSync(tmpPath) && fs.existsSync(dbPath)) {
-        fs.copyFileSync(dbPath, tmpPath);
+      if (!fs.existsSync(tmpPath) || fs.statSync(tmpPath).size < 1000) {
+        if (foundSource) {
+          fs.copyFileSync(foundSource, tmpPath);
+        }
       }
       if (fs.existsSync(tmpPath)) {
         dbPath = tmpPath;
@@ -41,6 +62,12 @@ export function getDb(): DatabaseSync {
   try {
     db.exec('PRAGMA foreign_keys = ON;');
     db.exec('PRAGMA synchronous = NORMAL;');
+  } catch {}
+
+  // Ensure username column exists on users table
+  try {
+    db.exec('ALTER TABLE users ADD COLUMN username TEXT;');
+    db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username);');
   } catch {}
 
   dbInstance = db;

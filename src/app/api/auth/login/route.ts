@@ -90,7 +90,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { error: 'Authentication service encountered an unexpected error.' },
+      { error: error?.message || 'Authentication service encountered an unexpected error.', stack: error?.stack },
       { status: 500 }
     );
   }
