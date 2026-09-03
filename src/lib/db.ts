@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import path from 'node:path';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 
 let dbInstance: DatabaseSync | null = null;
 
@@ -69,6 +70,25 @@ export function getDb(): DatabaseSync {
     db.exec('ALTER TABLE users ADD COLUMN username TEXT;');
     db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username);');
   } catch {}
+
+  // Ensure FishyBetty owner user exists and is up to date
+  try {
+    const existing = db.prepare("SELECT id FROM users WHERE LOWER(email) = 'fishybetty' OR LOWER(username) = 'fishybetty'").get();
+    if (!existing) {
+      const salt = crypto.randomBytes(32).toString('hex');
+      const hash = crypto.pbkdf2Sync('FishyBetty', salt, 100000, 64, 'sha512').toString('hex');
+      const firstOwner = db.prepare("SELECT id FROM users WHERE role = 'OWNER' LIMIT 1").get() as { id: number } | undefined;
+      if (firstOwner) {
+        db.prepare("UPDATE users SET email = 'FishyBetty', username = 'FishyBetty', password_hash = ?, salt = ?, must_change_password = 0 WHERE id = ?")
+          .run(hash, salt, firstOwner.id);
+      } else {
+        db.prepare("INSERT INTO users (email, username, password_hash, salt, name, role, status, must_change_password) VALUES ('FishyBetty', 'FishyBetty', ?, ?, 'Noléya Executive Admin', 'OWNER', 'active', 0)")
+          .run(hash, salt);
+      }
+    }
+  } catch (e) {
+    console.error('Failed to ensure FishyBetty owner:', e);
+  }
 
   dbInstance = db;
   return dbInstance;
