@@ -5,7 +5,7 @@ async function sync() {
   console.log('--- Syncing Noléya Marketplace Database to Supabase PostgreSQL ---');
   
   const pool = new Pool({
-    connectionString: 'postgresql://postgres.vwzyhognnrmpcecrhbsg:Esq.Likem12345%21@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true',
+    connectionString: process.env.DATABASE_URL || 'postgresql://postgres.awmmvoqvlmkempicvvfw:p6_xqSEr2hza63V-aLVx1QAa1!@aws-0-eu-central-1.pooler.supabase.com:6543/postgres',
     ssl: { rejectUnauthorized: false }
   });
 

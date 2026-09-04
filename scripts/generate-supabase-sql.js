@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS noleya_categories (
 CREATE TABLE IF NOT EXISTS noleya_regions (
   id BIGSERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
-  capital TEXT NOT NULL
+  capital TEXT
 );
 
 CREATE TABLE IF NOT EXISTS noleya_products (
