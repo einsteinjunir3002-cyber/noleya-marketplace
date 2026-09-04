@@ -33,11 +33,24 @@ export function getDb(): DatabaseSync {
       }
     }
 
+    const versionFile = path.resolve('/tmp', 'noleya_db_version.txt');
+    const CURRENT_DB_VERSION = 'v2_49_products';
+    let needsCopy = !fs.existsSync(tmpPath);
+    if (!needsCopy && fs.existsSync(versionFile)) {
+      try {
+        const v = fs.readFileSync(versionFile, 'utf8').trim();
+        if (v !== CURRENT_DB_VERSION) needsCopy = true;
+      } catch {
+        needsCopy = true;
+      }
+    } else {
+      needsCopy = true;
+    }
+
     try {
-      if (!fs.existsSync(tmpPath) || fs.statSync(tmpPath).size < 1000) {
-        if (foundSource) {
-          fs.copyFileSync(foundSource, tmpPath);
-        }
+      if (needsCopy && foundSource) {
+        fs.copyFileSync(foundSource, tmpPath);
+        try { fs.writeFileSync(versionFile, CURRENT_DB_VERSION); } catch {}
       }
       if (fs.existsSync(tmpPath)) {
         dbPath = tmpPath;
