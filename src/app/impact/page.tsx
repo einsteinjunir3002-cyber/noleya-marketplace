@@ -86,10 +86,10 @@ export default function ImpactPage() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '24px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+          gap: '20px',
         }}>
-          <div className="card" style={{ padding: '28px' }}>
+          <div className="card" style={{ padding: 'clamp(20px, 4vw, 28px)' }}>
             <div style={{
               width: '50px',
               height: '50px',
@@ -109,7 +109,7 @@ export default function ImpactPage() {
             </p>
           </div>
 
-          <div className="card" style={{ padding: '28px' }}>
+          <div className="card" style={{ padding: 'clamp(20px, 4vw, 28px)' }}>
             <div style={{
               width: '50px',
               height: '50px',
@@ -129,7 +129,7 @@ export default function ImpactPage() {
             </p>
           </div>
 
-          <div className="card" style={{ padding: '28px' }}>
+          <div className="card" style={{ padding: 'clamp(20px, 4vw, 28px)' }}>
             <div style={{
               width: '50px',
               height: '50px',
@@ -164,26 +164,14 @@ export default function ImpactPage() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
             {initiatives.map((item, index) => (
               <div
                 key={item.id}
-                className="card"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: index % 2 === 0 ? '340px 1fr' : '1fr 340px',
-                  overflow: 'hidden',
-                  alignItems: 'center',
-                }}
+                className={`card impact-card ${index % 2 === 0 ? 'layout-image-left' : 'layout-image-right'}`}
               >
                 {/* Image */}
-                <div style={{
-                  height: '100%',
-                  minHeight: '260px',
-                  position: 'relative',
-                  backgroundColor: '#E2E8F0',
-                  order: index % 2 === 0 ? 1 : 2,
-                }}>
+                <div className="impact-card-image">
                   {item.image_url ? (
                     <img
                       src={item.image_url}
@@ -199,15 +187,15 @@ export default function ImpactPage() {
                   {item.metric_value && (
                     <div style={{
                       position: 'absolute',
-                      bottom: '16px',
-                      left: '16px',
+                      bottom: '14px',
+                      left: '14px',
                       backgroundColor: 'rgba(15, 23, 42, 0.88)',
                       backdropFilter: 'blur(6px)',
                       color: '#FBBF24',
-                      padding: '8px 14px',
+                      padding: '6px 12px',
                       borderRadius: '8px',
                       fontWeight: 800,
-                      fontSize: '1.1rem',
+                      fontSize: '1.05rem',
                     }}>
                       {item.metric_value}
                       <div style={{ fontSize: '0.72rem', color: '#E2E8F0', fontWeight: 500 }}>
@@ -218,20 +206,17 @@ export default function ImpactPage() {
                 </div>
 
                 {/* Content */}
-                <div style={{
-                  padding: '36px',
-                  order: index % 2 === 0 ? 2 : 1,
-                }}>
-                  <span className="badge badge-primary" style={{ marginBottom: '10px' }}>
+                <div className="impact-card-content">
+                  <span className="badge badge-primary" style={{ marginBottom: '10px', alignSelf: 'flex-start' }}>
                     Foundation Initiative #{index + 1}
                   </span>
-                  <h3 style={{ fontSize: '1.6rem', color: '#0F172A', marginBottom: '14px' }}>
+                  <h3 className="impact-card-title" style={{ fontSize: '1.6rem', color: '#0F172A', marginBottom: '14px' }}>
                     {item.initiative_name}
                   </h3>
-                  <p style={{ color: '#334155', fontSize: '1.02rem', lineHeight: 1.7, marginBottom: '16px' }}>
+                  <p className="impact-card-desc" style={{ color: '#334155', fontSize: '1.02rem', lineHeight: 1.7, marginBottom: '16px' }}>
                     {item.description}
                   </p>
-                  <p style={{ color: '#64748B', fontSize: '0.9rem', fontStyle: 'italic', lineHeight: 1.6 }}>
+                  <p className="impact-card-summary" style={{ color: '#64748B', fontSize: '0.9rem', fontStyle: 'italic', lineHeight: 1.6 }}>
                     {item.summary}
                   </p>
                 </div>
