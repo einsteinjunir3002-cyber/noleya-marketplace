@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Search, Filter, SlidersHorizontal, ShoppingBag, X } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
-import { ShopSortSelect, ShopRegionSelect } from '@/components/ShopControls';
+import { ShopSortSelect, ShopRegionSelect, MobileFilterWrapper } from '@/components/ShopControls';
 import { getProducts, getCategories, getRegions, formatGHS } from '@/lib/services';
 import type { Metadata } from 'next';
 
@@ -65,11 +65,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   };
 
   const hasActiveFilters = Boolean(search || category || region);
+  const activeFilterCount = (search ? 1 : 0) + (category ? 1 : 0) + (region ? 1 : 0);
 
   return (
-    <div className="container" style={{ padding: '40px 20px 80px' }}>
+    <div className="container" style={{ padding: '28px 16px 80px' }}>
       {/* Header Banner */}
-      <div style={{ marginBottom: '32px' }}>
+      <div style={{ marginBottom: '28px' }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -127,127 +128,129 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         alignItems: 'flex-start',
       }} className="shop-layout">
         {/* Filters Sidebar */}
-        <aside className="card" style={{
-          padding: '24px',
-          position: 'sticky',
-          top: '90px',
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '20px',
-            borderBottom: '1px solid #E2E8F0',
-            paddingBottom: '12px',
+        <MobileFilterWrapper activeCount={activeFilterCount}>
+          <aside className="card" style={{
+            padding: '24px',
+            position: 'sticky',
+            top: '90px',
           }}>
-            <h3 style={{ fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <SlidersHorizontal size={18} style={{ color: '#065F46' }} /> Filters
-            </h3>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '20px',
+              borderBottom: '1px solid #E2E8F0',
+              paddingBottom: '12px',
+            }}>
+              <h3 style={{ fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <SlidersHorizontal size={18} style={{ color: '#065F46' }} /> Filters
+              </h3>
 
-            {hasActiveFilters && (
-              <Link
-                href="/shop"
-                style={{
-                  fontSize: '0.78rem',
-                  color: '#DC2626',
-                  fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
-              >
-                <X size={13} /> Reset All
-              </Link>
-            )}
-          </div>
-
-          {/* Search Box */}
-          <div className="form-group" style={{ marginBottom: '24px' }}>
-            <label className="form-label" style={{ fontSize: '0.82rem' }}>Keyword Search</label>
-            <form action="/shop" method="GET" style={{ position: 'relative' }}>
-              {category && <input type="hidden" name="category" value={category} />}
-              {region && <input type="hidden" name="region" value={region} />}
-              {sort && <input type="hidden" name="sort" value={sort} />}
-              <input
-                type="text"
-                name="search"
-                defaultValue={search}
-                placeholder="Product name, bag..."
-                className="form-input"
-                style={{ paddingRight: '36px', fontSize: '0.85rem' }}
-              />
-              <button
-                type="submit"
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#64748B',
-                }}
-              >
-                <Search size={16} />
-              </button>
-            </form>
-          </div>
-
-          {/* Category Filter */}
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px', color: '#475569' }}>
-              Categories
+              {hasActiveFilters && (
+                <Link
+                  href="/shop"
+                  style={{
+                    fontSize: '0.78rem',
+                    color: '#DC2626',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  <X size={13} /> Reset All
+                </Link>
+              )}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <Link
-                href={makeFilterUrl({ category: undefined, page: 1 })}
-                style={{
-                  fontSize: '0.88rem',
-                  color: !category ? '#065F46' : '#64748B',
-                  fontWeight: !category ? 700 : 500,
-                  padding: '5px 8px',
-                  borderRadius: '6px',
-                  backgroundColor: !category ? '#ECFDF5' : 'transparent',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <span>All Categories</span>
-                <span>{total}</span>
-              </Link>
 
-              {categories.map((c) => {
-                const isActive = category === c.slug;
-                return (
-                  <Link
-                    key={c.id}
-                    href={makeFilterUrl({ category: isActive ? undefined : c.slug, page: 1 })}
-                    style={{
-                      fontSize: '0.88rem',
-                      color: isActive ? '#065F46' : '#64748B',
-                      fontWeight: isActive ? 700 : 500,
-                      padding: '5px 8px',
-                      borderRadius: '6px',
-                      backgroundColor: isActive ? '#ECFDF5' : 'transparent',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <span>{c.name}</span>
-                    <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>{c.product_count || 0}</span>
-                  </Link>
-                );
-              })}
+            {/* Search Box */}
+            <div className="form-group" style={{ marginBottom: '24px' }}>
+              <label className="form-label" style={{ fontSize: '0.82rem' }}>Keyword Search</label>
+              <form action="/shop" method="GET" style={{ position: 'relative' }}>
+                {category && <input type="hidden" name="category" value={category} />}
+                {region && <input type="hidden" name="region" value={region} />}
+                {sort && <input type="hidden" name="sort" value={sort} />}
+                <input
+                  type="text"
+                  name="search"
+                  defaultValue={search}
+                  placeholder="Product name, bag..."
+                  className="form-input"
+                  style={{ paddingRight: '36px', fontSize: '0.85rem' }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#64748B',
+                  }}
+                >
+                  <Search size={16} />
+                </button>
+              </form>
             </div>
-          </div>
 
-          {/* Regional Location Filter */}
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px', color: '#475569' }}>
-              Seller Location
+            {/* Category Filter */}
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px', color: '#475569' }}>
+                Categories
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <Link
+                  href={makeFilterUrl({ category: undefined, page: 1 })}
+                  style={{
+                    fontSize: '0.88rem',
+                    color: !category ? '#065F46' : '#64748B',
+                    fontWeight: !category ? 700 : 500,
+                    padding: '5px 8px',
+                    borderRadius: '6px',
+                    backgroundColor: !category ? '#ECFDF5' : 'transparent',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span>All Categories</span>
+                  <span>{total}</span>
+                </Link>
+
+                {categories.map((c) => {
+                  const isActive = category === c.slug;
+                  return (
+                    <Link
+                      key={c.id}
+                      href={makeFilterUrl({ category: isActive ? undefined : c.slug, page: 1 })}
+                      style={{
+                        fontSize: '0.88rem',
+                        color: isActive ? '#065F46' : '#64748B',
+                        fontWeight: isActive ? 700 : 500,
+                        padding: '5px 8px',
+                        borderRadius: '6px',
+                        backgroundColor: isActive ? '#ECFDF5' : 'transparent',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <span>{c.name}</span>
+                      <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>{c.product_count || 0}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-            <ShopRegionSelect currentRegion={region} regions={regions} />
-          </div>
 
-        </aside>
+            {/* Regional Location Filter */}
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px', color: '#475569' }}>
+                Seller Location
+              </div>
+              <ShopRegionSelect currentRegion={region} regions={regions} />
+            </div>
+
+          </aside>
+        </MobileFilterWrapper>
 
         {/* Product Grid & Active Tags */}
         <section>
@@ -286,7 +289,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           {/* Product Results */}
           {products.length > 0 ? (
             <>
-              <div className="grid grid-cols-3" style={{ gap: '20px' }}>
+              <div className="product-grid">
                 {products.map((p) => (
                   <ProductCard key={p.id} product={p} />
                 ))}

@@ -100,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Card Content */}
-      <div style={{
+      <div className="product-card-body" style={{
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -111,22 +111,22 @@ export default function ProductCard({ product }: ProductCardProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          fontSize: '0.78rem',
+          fontSize: '0.76rem',
           color: '#64748B',
           marginBottom: '6px',
         }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}>
-            <CheckCircle size={12} style={{ color: '#065F46' }} /> {product.seller_name || 'Verified Seller'}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
+            <CheckCircle size={11} style={{ color: '#065F46', flexShrink: 0 }} /> {product.seller_name || 'Verified Seller'}
           </span>
           {product.seller_region && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', color: '#94A3B8' }}>
-              <MapPin size={11} /> {product.seller_region.replace(' Region', '')}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', color: '#94A3B8', fontSize: '0.72rem', flexShrink: 0 }}>
+              <MapPin size={10} /> {product.seller_region.replace(' Region', '')}
             </span>
           )}
         </div>
 
         {/* Product Title */}
-        <h3 style={{
+        <h3 className="product-card-title" style={{
           fontSize: '0.98rem',
           fontWeight: 700,
           color: '#0F172A',
@@ -147,13 +147,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
-          marginBottom: '14px',
+          gap: '6px',
+          marginBottom: '12px',
           marginTop: 'auto',
+          flexWrap: 'wrap',
         }}>
           {product.price_ghs && Number(product.price_ghs) > 0 ? (
-            <span style={{
-              fontSize: '1.2rem',
+            <span className="product-card-price" style={{
+              fontSize: '1.18rem',
               fontWeight: 800,
               color: '#065F46',
               letterSpacing: '-0.01em',
@@ -161,19 +162,19 @@ export default function ProductCard({ product }: ProductCardProps) {
               {formatGHS(product.price_ghs)}
             </span>
           ) : (
-            <span style={{
-              fontSize: '0.88rem',
+            <span className="product-card-request" style={{
+              fontSize: '0.84rem',
               fontWeight: 700,
               color: '#065F46',
               backgroundColor: '#ECFDF5',
-              padding: '5px 12px',
+              padding: '4px 8px',
               borderRadius: '6px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               border: '1px solid #A7F3D0',
             }}>
-              <MessageCircle size={14} style={{ color: '#059669' }} /> Price on Request
+              <MessageCircle size={13} style={{ color: '#059669', flexShrink: 0 }} /> Price on Request
             </span>
           )}
         </div>
@@ -182,14 +183,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr auto',
-          gap: '8px',
+          gap: '6px',
         }}>
           <Link
             href={`/product/${product.slug}`}
             className="btn btn-sm btn-outline-primary"
-            style={{ width: '100%' }}
+            style={{ width: '100%', padding: '6px 8px', fontSize: '0.82rem', gap: '4px' }}
           >
-            <Eye size={14} /> View Details
+            <Eye size={13} />
+            <span className="product-card-btn-text">View Details</span>
+            <span className="product-card-btn-short">View</span>
           </Link>
 
           <a
@@ -199,9 +202,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             onClick={handleWhatsAppClick}
             className="btn btn-sm btn-whatsapp"
             title="Order directly with Seller on WhatsApp"
-            style={{ padding: '6px 12px' }}
+            style={{ padding: '6px 10px' }}
           >
-            <MessageCircle size={16} />
+            <MessageCircle size={15} />
           </a>
         </div>
       </div>

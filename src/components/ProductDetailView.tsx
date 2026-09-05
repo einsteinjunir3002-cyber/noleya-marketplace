@@ -100,7 +100,7 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
   };
 
   return (
-    <div className="container" style={{ padding: '36px 20px 80px' }}>
+    <div className="container has-floating-bar" style={{ padding: '24px 16px 80px' }}>
       {/* Breadcrumbs */}
       <div style={{
         display: 'flex',
@@ -108,7 +108,7 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
         gap: '8px',
         fontSize: '0.85rem',
         color: '#64748B',
-        marginBottom: '28px',
+        marginBottom: '24px',
         flexWrap: 'wrap',
       }}>
         <Link href="/" style={{ color: '#065F46' }}>Home</Link>
@@ -129,9 +129,9 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
       {/* Main Grid: Gallery & Details */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(320px, 1fr) minmax(320px, 1fr)',
-        gap: '48px',
-        marginBottom: '64px',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+        gap: '36px',
+        marginBottom: '48px',
       }} className="product-details-grid">
         {/* Left Column: Image Gallery */}
         <div>
@@ -545,21 +545,48 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
-        <section style={{ marginTop: '80px', borderTop: '1px solid #E2E8F0', paddingTop: '48px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
-            <h2 style={{ fontSize: '1.6rem' }}>You May Also Like</h2>
-            <Link href={`/shop?category=${product.category_slug}`} style={{ color: '#065F46', fontWeight: 600, fontSize: '0.9rem' }}>
-              View More in Category &rarr;
+        <section style={{ marginTop: '60px', borderTop: '1px solid #E2E8F0', paddingTop: '40px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '8px' }}>
+            <h2 style={{ fontSize: '1.5rem' }}>You May Also Like</h2>
+            <Link href={`/shop?category=${product.category_slug}`} style={{ color: '#065F46', fontWeight: 600, fontSize: '0.88rem' }}>
+              View More &rarr;
             </Link>
           </div>
 
-          <div className="grid grid-cols-4">
+          <div className="home-featured-grid">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </section>
       )}
+
+      {/* Mobile Sticky Floating CTA Bar */}
+      <div className="mobile-floating-bar">
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600 }}>Price</span>
+          <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#065F46' }}>
+            {product.price_ghs && Number(product.price_ghs) > 0 ? formatGHS(product.price_ghs) : 'Price on Request'}
+          </span>
+        </div>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleWhatsAppOrder}
+          className="btn btn-whatsapp"
+          style={{
+            padding: '10px 18px',
+            fontSize: '0.9rem',
+            fontWeight: 700,
+            borderRadius: '8px',
+            gap: '6px',
+          }}
+        >
+          <MessageCircle size={18} /> Order on WhatsApp
+        </a>
+      </div>
     </div>
   );
 }

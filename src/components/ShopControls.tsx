@@ -75,3 +75,43 @@ export function ShopRegionSelect({ currentRegion, regions }: ShopRegionSelectPro
     </select>
   );
 }
+
+interface MobileFilterWrapperProps {
+  children: React.ReactNode;
+  activeCount?: number;
+}
+
+export function MobileFilterWrapper({ children, activeCount = 0 }: MobileFilterWrapperProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <div className="mobile-filter-wrapper">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="btn btn-outline mobile-only"
+        style={{
+          width: '100%',
+          marginBottom: '14px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#FFFFFF',
+          padding: '10px 14px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+        }}
+      >
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          Filters &amp; Categories {activeCount > 0 && <span className="badge badge-accent">({activeCount})</span>}
+        </span>
+        <span className="badge badge-subtle">{isOpen ? 'Hide Filters ▲' : 'Show Filters ▼'}</span>
+      </button>
+
+      <div className={`shop-filter-content ${isOpen ? 'is-open' : 'is-collapsed'}`}>
+        {children}
+      </div>
+    </div>
+  );
+}
+

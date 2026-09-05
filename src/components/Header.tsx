@@ -62,8 +62,8 @@ export default function Header({ user }: HeaderProps) {
       <div style={{
         backgroundColor: '#065F46',
         color: '#FFFFFF',
-        padding: '7px 0',
-        fontSize: '0.8rem',
+        padding: '6px 0',
+        fontSize: '0.78rem',
         borderBottom: '1px solid rgba(255,255,255,0.1)',
       }}>
         <div className="container" style={{
@@ -71,38 +71,39 @@ export default function Header({ user }: HeaderProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '8px',
+          gap: '6px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             <span style={{
               backgroundColor: '#D97706',
               color: '#FFFFFF',
-              fontSize: '0.7rem',
+              fontSize: '0.68rem',
               fontWeight: 700,
               padding: '2px 6px',
               borderRadius: '4px',
               letterSpacing: '0.04em',
+              whiteSpace: 'nowrap',
             }}>
               NOLÉYA FOUNDATION
             </span>
-            <span style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Spreading joy. Restoring hope. Shopping here funds community outreach.
+            <span style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.76rem' }}>
+              Spreading joy. Restoring hope.
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.76rem' }}>
             <a 
               href="tel:0545811197" 
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#FEF3C7', fontWeight: 600 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#FEF3C7', fontWeight: 600, whiteSpace: 'nowrap' }}
             >
-              <Phone size={12} /> 0545811197
+              <Phone size={11} /> 0545811197
             </a>
             <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
             <a 
               href="tel:0204822847" 
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#FEF3C7', fontWeight: 600 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#FEF3C7', fontWeight: 600, whiteSpace: 'nowrap' }}
             >
-              <Phone size={12} /> 0204822847
+              <Phone size={11} /> 0204822847
             </a>
           </div>
         </div>
@@ -110,39 +111,44 @@ export default function Header({ user }: HeaderProps) {
 
       {/* Main Navigation Bar */}
       <div className="container" style={{
-        height: '76px',
+        minHeight: '68px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '20px',
+        gap: '12px',
+        paddingTop: '8px',
+        paddingBottom: '8px',
       }}>
         {/* Brand Logo */}
-        <Link href="/" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <Link href="/" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{
               fontFamily: 'serif',
               fontWeight: 900,
-              fontSize: '1.45rem',
+              fontSize: 'clamp(1.15rem, 4vw, 1.45rem)',
               letterSpacing: '-0.03em',
               color: '#065F46',
+              lineHeight: 1.1,
             }}>
               NOLÉYA
             </span>
             <span style={{
-              fontSize: '0.9rem',
+              fontSize: 'clamp(0.72rem, 2.2vw, 0.9rem)',
               fontWeight: 700,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.1em',
               color: '#C2410C',
               textTransform: 'uppercase',
+              lineHeight: 1.1,
             }}>
               MARKETPLACE
             </span>
           </div>
           <span style={{
-            fontSize: '0.68rem',
+            fontSize: 'clamp(0.6rem, 1.8vw, 0.68rem)',
             color: '#64748B',
             fontWeight: 500,
             letterSpacing: '0.04em',
+            marginTop: '2px',
           }}>
             Shop with purpose.
           </span>
@@ -270,8 +276,11 @@ export default function Header({ user }: HeaderProps) {
               <Link href="/auth/login" className="btn btn-sm btn-outline" style={{ display: 'none' }} id="login-nav-btn">
                 <User size={14} /> Log In
               </Link>
-              <Link href="/shop" className="btn btn-sm btn-primary">
+              <Link href="/shop" className="btn btn-sm btn-primary desktop-only">
                 Shop Now <ArrowRight size={14} />
+              </Link>
+              <Link href="/shop" className="btn btn-sm btn-primary mobile-only" style={{ padding: '8px 10px' }} title="Browse Products" aria-label="Browse Products">
+                <ShoppingBag size={18} />
               </Link>
             </div>
           )}

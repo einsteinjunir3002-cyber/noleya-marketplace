@@ -137,11 +137,7 @@ export default async function HomePage() {
         borderBottom: '1px solid #E2E8F0',
         padding: '20px 0',
       }}>
-        <div className="container" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '20px',
-        }}>
+        <div className="container trust-strip-grid">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ShieldCheck size={26} style={{ color: '#065F46', flexShrink: 0 }} />
             <div>
@@ -206,11 +202,7 @@ export default async function HomePage() {
         </div>
 
         {/* Categories Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="category-grid">
           {categories.map((cat) => (
             <Link
               key={cat.id}
@@ -285,7 +277,7 @@ export default async function HomePage() {
           </div>
 
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-4">
+            <div className="home-featured-grid">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
