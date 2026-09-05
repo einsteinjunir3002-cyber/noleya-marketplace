@@ -60,11 +60,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         zIndex: 2,
         pointerEvents: 'none',
       }}>
-        {discountPercent ? (
-          <span className="badge badge-secondary" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-            SAVE {discountPercent}%
-          </span>
-        ) : product.is_featured ? (
+        {product.is_featured ? (
           <span className="badge badge-accent" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
             FEATURED
           </span>
@@ -147,30 +143,37 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Link>
         </h3>
 
-        {/* Price Tag */}
+        {/* Price / Inquiry Tag */}
         <div style={{
           display: 'flex',
-          alignItems: 'baseline',
+          alignItems: 'center',
           gap: '8px',
           marginBottom: '14px',
           marginTop: 'auto',
         }}>
-          <span style={{
-            fontSize: '1.2rem',
-            fontWeight: 800,
-            color: '#065F46',
-            letterSpacing: '-0.01em',
-          }}>
-            {formatGHS(product.price_ghs)}
-          </span>
-
-          {product.compare_price_ghs && product.compare_price_ghs > product.price_ghs && (
+          {product.price_ghs && Number(product.price_ghs) > 0 ? (
             <span style={{
-              fontSize: '0.85rem',
-              color: '#94A3B8',
-              textDecoration: 'line-through',
+              fontSize: '1.2rem',
+              fontWeight: 800,
+              color: '#065F46',
+              letterSpacing: '-0.01em',
             }}>
-              {formatGHS(product.compare_price_ghs)}
+              {formatGHS(product.price_ghs)}
+            </span>
+          ) : (
+            <span style={{
+              fontSize: '0.88rem',
+              fontWeight: 700,
+              color: '#065F46',
+              backgroundColor: '#ECFDF5',
+              padding: '5px 12px',
+              borderRadius: '6px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: '1px solid #A7F3D0',
+            }}>
+              <MessageCircle size={14} style={{ color: '#059669' }} /> Price on Request
             </span>
           )}
         </div>

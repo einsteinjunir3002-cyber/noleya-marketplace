@@ -1,4 +1,7 @@
-export function formatGHS(amount: number): string {
+export function formatGHS(amount?: number): string {
+  if (!amount || Number(amount) <= 0) {
+    return 'Price on Request';
+  }
   return `GH₵ ${Number(amount).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
@@ -20,9 +23,9 @@ export function sanitizeWhatsAppPhone(phone: string): string {
   return clean;
 }
 
-export function buildWhatsAppUrl(phone: string, productName: string, priceGhs: number, productUrl?: string): string {
+export function buildWhatsAppUrl(phone: string, productName: string, priceGhs?: number, productUrl?: string): string {
   const cleanPhone = sanitizeWhatsAppPhone(phone);
-  const formattedPrice = formatGHS(priceGhs);
-  const message = `Hello, I am interested in purchasing "${productName}" (${formattedPrice}) listed on Noléya Marketplace.${productUrl ? ` Link: ${productUrl}` : ''} Please confirm product availability and delivery options.`;
+  const priceText = priceGhs && Number(priceGhs) > 0 ? ` (${formatGHS(priceGhs)})` : '';
+  const message = `Hello, I am interested in inquiring about "${productName}"${priceText} listed on Noléya Marketplace.${productUrl ? ` Link: ${productUrl}` : ''} Please share pricing, product availability, and delivery options.`;
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 }

@@ -16,9 +16,7 @@ interface ShopPageProps {
     search?: string;
     category?: string;
     region?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    sort?: 'featured' | 'newest' | 'price_asc' | 'price_desc' | 'name_asc';
+    sort?: 'featured' | 'newest' | 'name_asc';
     page?: string;
   }>;
 }
@@ -28,8 +26,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const search = params.search || '';
   const category = params.category || '';
   const region = params.region || '';
-  const minPrice = params.minPrice ? parseFloat(params.minPrice) : undefined;
-  const maxPrice = params.maxPrice ? parseFloat(params.maxPrice) : undefined;
   const sort = params.sort || 'featured';
   const page = params.page ? parseInt(params.page, 10) : 1;
   const pageSize = 16;
@@ -39,8 +35,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     search,
     category,
     region,
-    minPrice,
-    maxPrice,
     sort,
     limit: pageSize,
     offset,
@@ -56,8 +50,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     if (search) current.search = search;
     if (category) current.category = category;
     if (region) current.region = region;
-    if (minPrice !== undefined) current.minPrice = String(minPrice);
-    if (maxPrice !== undefined) current.maxPrice = String(maxPrice);
     if (sort) current.sort = sort;
 
     for (const [key, val] of Object.entries(overrides)) {
@@ -72,7 +64,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     return `/shop${q ? `?${q}` : ''}`;
   };
 
-  const hasActiveFilters = Boolean(search || category || region || minPrice !== undefined || maxPrice !== undefined);
+  const hasActiveFilters = Boolean(search || category || region);
 
   return (
     <div className="container" style={{ padding: '40px 20px 80px' }}>
@@ -255,40 +247,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             <ShopRegionSelect currentRegion={region} regions={regions} />
           </div>
 
-          {/* Price Range Filter */}
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px', color: '#475569' }}>
-              Price Range (GH₵)
-            </div>
-            <form action="/shop" method="GET" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {search && <input type="hidden" name="search" value={search} />}
-              {category && <input type="hidden" name="category" value={category} />}
-              {region && <input type="hidden" name="region" value={region} />}
-              {sort && <input type="hidden" name="sort" value={sort} />}
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <input
-                  type="number"
-                  name="minPrice"
-                  defaultValue={minPrice || ''}
-                  placeholder="Min GH₵"
-                  className="form-input"
-                  style={{ fontSize: '0.82rem', padding: '8px' }}
-                />
-                <input
-                  type="number"
-                  name="maxPrice"
-                  defaultValue={maxPrice || ''}
-                  placeholder="Max GH₵"
-                  className="form-input"
-                  style={{ fontSize: '0.82rem', padding: '8px' }}
-                />
-              </div>
-              <button type="submit" className="btn btn-sm btn-outline-primary" style={{ marginTop: '4px' }}>
-                Apply Price
-              </button>
-            </form>
-          </div>
         </aside>
 
         {/* Product Grid & Active Tags */}
@@ -322,17 +280,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 </Link>
               )}
 
-              {minPrice !== undefined && (
-                <Link href={makeFilterUrl({ minPrice: undefined })} className="badge badge-subtle">
-                  Min: GH₵ {minPrice} <X size={12} />
-                </Link>
-              )}
-
-              {maxPrice !== undefined && (
-                <Link href={makeFilterUrl({ maxPrice: undefined })} className="badge badge-subtle">
-                  Max: GH₵ {maxPrice} <X size={12} />
-                </Link>
-              )}
             </div>
           )}
 

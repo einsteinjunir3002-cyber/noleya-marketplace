@@ -255,31 +255,38 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
             {product.name}
           </h1>
 
-          {/* Price Tag */}
+          {/* Price / Inquiry Tag */}
           <div style={{
             display: 'flex',
-            alignItems: 'baseline',
+            alignItems: 'center',
             gap: '14px',
             marginBottom: '20px',
             paddingBottom: '20px',
             borderBottom: '1px solid #E2E8F0',
+            flexWrap: 'wrap',
           }}>
-            <span style={{
-              fontSize: '2rem',
-              fontWeight: 900,
-              color: '#065F46',
-            }}>
-              {formatGHS(product.price_ghs)}
-            </span>
-
-            {product.compare_price_ghs && product.compare_price_ghs > product.price_ghs && (
+            {product.price_ghs && Number(product.price_ghs) > 0 ? (
               <span style={{
-                fontSize: '1.15rem',
-                color: '#94A3B8',
-                textDecoration: 'line-through',
+                fontSize: '2rem',
+                fontWeight: 900,
+                color: '#065F46',
               }}>
-                {formatGHS(product.compare_price_ghs)}
+                {formatGHS(product.price_ghs)}
               </span>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  fontSize: '1.35rem',
+                  fontWeight: 800,
+                  color: '#065F46',
+                  letterSpacing: '-0.01em',
+                }}>
+                  Price on Request
+                </span>
+                <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: 500 }}>
+                  &bull; Inquire for pricing & custom options
+                </span>
+              </div>
             )}
 
             <span className="badge badge-success" style={{ marginLeft: 'auto' }}>
@@ -341,7 +348,7 @@ export default function ProductDetailView({ product, relatedProducts, siteUrl }:
                 padding: '16px 24px',
               }}
             >
-              <MessageCircle size={22} /> ORDER ON WHATSAPP
+              <MessageCircle size={22} /> INQUIRE & ORDER ON WHATSAPP
             </a>
 
             <div style={{ display: 'flex', gap: '12px' }}>

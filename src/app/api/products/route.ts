@@ -48,8 +48,8 @@ export async function POST(request: Request) {
       images, // array of { url, thumbnailUrl, altText }
     } = body;
 
-    if (!name || !description || priceGhs === undefined || !categoryId) {
-      return NextResponse.json({ error: 'Name, description, price, and category are required.' }, { status: 400 });
+    if (!name || !description || !categoryId) {
+      return NextResponse.json({ error: 'Name, description, and category are required.' }, { status: 400 });
     }
 
     // Determine sellerId

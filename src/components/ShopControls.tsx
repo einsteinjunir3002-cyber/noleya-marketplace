@@ -34,8 +34,6 @@ export function ShopSortSelect({ currentSort }: ShopSortSelectProps) {
     >
       <option value="featured">Featured First</option>
       <option value="newest">Newest Arrivals</option>
-      <option value="price_asc">Price: Low to High</option>
-      <option value="price_desc">Price: High to Low</option>
       <option value="name_asc">Alphabetical (A-Z)</option>
     </select>
   );

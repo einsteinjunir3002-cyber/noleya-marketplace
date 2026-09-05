@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 
   const title = `${product.name} | Noléya Marketplace Ghana`;
-  const description = `${product.description.slice(0, 155)}... Price: ${formatGHS(product.price_ghs)}. Order directly via WhatsApp.`;
+  const description = `${product.description.slice(0, 160)}... Inquire and order directly via WhatsApp.`;
   const siteUrl = process.env.SITE_URL || 'http://localhost:3000';
   const imageUrl = product.primary_image ? `${siteUrl}${product.primary_image}` : `${siteUrl}/placeholder.png`;
 
@@ -74,8 +74,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
     sku: product.sku || `NL-${product.id}`,
     offers: {
       '@type': 'Offer',
-      priceCurrency: 'GHS',
-      price: product.price_ghs,
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
