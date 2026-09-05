@@ -34,7 +34,7 @@ export function getDb(): DatabaseSync {
     }
 
     const versionFile = path.resolve('/tmp', 'noleya_db_version.txt');
-    const CURRENT_DB_VERSION = 'v4_47_products_price_on_request';
+    const CURRENT_DB_VERSION = 'v5_product_price_list_applied';
     let needsCopy = !fs.existsSync(tmpPath);
     if (!needsCopy && fs.existsSync(versionFile)) {
       try {
